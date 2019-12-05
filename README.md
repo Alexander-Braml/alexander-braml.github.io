@@ -1,1 +1,2 @@
-# GitHube Pages Webpage
+# GitHub Pages Webpage
+GitHub Page
