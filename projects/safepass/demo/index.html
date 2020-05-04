@@ -39,13 +39,12 @@ var msg = "";
 var sum_key = 0;
 var password = "";
 var sliderVal = 0;
+var asciiSum = 0;
 
 function safePass() {
     var tempMsg = document.form.msgView.value;
     var tempKey = document.form.keyView.value;
     var tempSlider = sliderOut.innerHTML;
-
-    console.log(tempSlider);
 
     this.sliderVal = parseInt(tempSlider);
 
@@ -78,6 +77,12 @@ function safePass() {
             this.key[i] = tempKey.charAt(i) - '0';
             sum_key += this.key[i];
         }
+
+        this.asciiSum = 0;
+        for (var j = 0; j < tempMsg.length; j++) {
+            this.asciiSum += tempMsg.charCodeAt(j);
+        }
+
         this.msg = tempMsg;
         password = encode();
         txt = password;
@@ -112,16 +117,11 @@ function encode() {
 function getNewPos(i) {
     var idx = i % 6;
 
-    var asciiSum = 0;
-    for (var j = 0; j < msg.length; j++) {
-        asciiSum += msg.charCodeAt(j);
-    }
-
     var first = getFirstPart(idx);
     var second = getSecondPart(i, idx);
     var third = getThirdPart(i);
 
-    return first + second + third - asciiSum;
+    return first + second + third - (asciiSum % 13);
 }
 
 function getFirstPart(idx) {
@@ -157,7 +157,7 @@ function getSecondPart(i, idx) {
 
 function getThirdPart(i) {
     var third = -sliderVal;
-    for (var j = 0; j <= i; j++) {
+    for (var j = 0; j < ((i + 1) % 99); j++) {
         third += sum_key - (key[2] - key[5] + j);
     }
 
